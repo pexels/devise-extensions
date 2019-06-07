@@ -5,13 +5,12 @@ require File.expand_path('../boot', __FILE__)
 require 'action_mailer/railtie'
 require "action_mailer/railtie"
 require "rails/test_unit/railtie"
-DEVISE_ORM = ENV.fetch('DEVISE_ORM', 'active_record').to_sym
 
-Bundler.require :default, DEVISE_ORM
-require "#{DEVISE_ORM}/railtie"
+Bundler.require :default, 'active_record'
+require "active_record/railtie"
 
 require 'rails/all'
-require 'devise-security'
+require 'devise-extensions'
 
 module RailsApp
   class Application < Rails::Application
@@ -19,7 +18,7 @@ module RailsApp
 
     config.filter_parameters += [:password]
 
-    config.autoload_paths += ["#{config.root}/app/#{DEVISE_ORM}"]
+    config.autoload_paths += ["#{config.root}/app/active_record"]
     config.autoload_paths += ["#{config.root}/lib"]
 
     config.assets.enabled = true

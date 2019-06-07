@@ -4,9 +4,9 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rdoc/task'
-require 'devise-security/version'
+require 'devise-extensions/version'
 
-desc 'Default: Run DeviseSecurity unit tests'
+desc 'Default: Run unit tests'
 task default: :test
 
 Rake::TestTask.new(:test) do |t|
@@ -18,7 +18,7 @@ Rake::TestTask.new(:test) do |t|
 end
 
 Rake::RDocTask.new do |rdoc|
-  version = DeviseSecurity::VERSION.dup
+  version = DeviseExtensions::VERSION.dup
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "devise-security #{version}"

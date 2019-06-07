@@ -6,13 +6,13 @@ class Devise::PasswordExpiredControllerTest < ActionController::TestCase
   include Devise::Test::ControllerHelpers
 
   setup do
-    @request.env["devise.mapping"] = Devise.mappings[:user]
+    @request.env['devise.mapping'] = Devise.mappings[:user]
     @user = User.create!(
       username: 'hello',
       email: 'hello@path.travel',
       password: 'Password4',
-      password_changed_at: 4.months.ago,
-      confirmed_at: 5.months.ago
+      confirmed_at: 5.months.ago,
+      password_expired: true
     )
     assert @user.valid?
     sign_in(@user)
@@ -23,24 +23,48 @@ class Devise::PasswordExpiredControllerTest < ActionController::TestCase
     assert_includes @response.body, 'Renew your password'
   end
 
-  test 'should update password' do
-    if Rails.version < "5"
-      put :update, {
-        user: {
-          current_password: 'Password4',
-          password: 'Password5',
-          password_confirmation: 'Password5'
-        }
-      }
-    else
-      put :update, params: {
-        user: {
-          current_password: 'Password4',
-          password: 'Password5',
-          password_confirmation: 'Password5'
-        }
-      }
-    end
+  test 'it should redirect if the password is not expired' do
+    @user.update!(password_expired: false)
+    get :show
     assert_redirected_to root_path
+  end
+
+  test 'should update password' do
+    put :update, params: {
+      user: {
+        current_password: 'Password4',
+        password: 'Password5',
+        password_confirmation: 'Password5'
+      }
+    }
+    @user.reload
+    refute @user.password_expired?
+    assert_redirected_to root_path
+  end
+
+  test 'it should not accept the wrong current password' do
+    put :update, params: {
+      user: {
+        current_password: 'Password',
+        password: 'Password5',
+        password_confirmation: 'Password5'
+      }
+    }
+    @user.reload
+    assert @user.password_expired?
+    assert_includes @response.body, 'Renew your password'
+  end
+
+  test 'it should not accept an invalid new password' do
+    put :update, params: {
+      user: {
+        current_password: 'Password4',
+        password: 'pass',
+        password_confirmation: 'pass'
+      }
+    }
+    @user.reload
+    assert @user.password_expired?
+    assert_includes @response.body, 'Renew your password'
   end
 end
