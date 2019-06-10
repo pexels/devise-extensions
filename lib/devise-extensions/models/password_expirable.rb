@@ -23,5 +23,13 @@ module Devise::Models
       update_column(:password_expired, true)
     end
     alias password_expired! expire_password!
+
+    module ClassMethods
+      def expire_password!
+        update_all(password_expired: true)
+      end
+      alias password_expired! expire_password!
+      alias expire_passwords! expire_password!
+    end
   end
 end

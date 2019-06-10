@@ -16,4 +16,14 @@ class TestPasswordArchivable < ActiveSupport::TestCase
     user.update!(email: 'john@microsoft.com')
     assert user.password_expired?
   end
+
+  test 'a relation can be expired' do
+    User.create email: 'first@example.com', password: 'Password1', password_confirmation: 'Password1'
+    User.create email: 'second@example.com', password: 'Password1', password_confirmation: 'Password1'
+    User.expire_passwords!
+
+    User.all.each do |user|
+      assert user.password_expired?
+    end
+  end
 end
