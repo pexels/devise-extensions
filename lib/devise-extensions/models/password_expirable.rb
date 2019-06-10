@@ -17,7 +17,6 @@ module Devise::Models
     def expire_password
       self.password_expired = true
     end
-    alias password_expired expire_password
 
     def expire_password!
       update_column(:password_expired, true)
