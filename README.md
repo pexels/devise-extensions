@@ -2,6 +2,19 @@
 
 Forked from [devise-security](https://github.com/devise-security/devise-security).
 
+## PasswordExpirable
+Allows devise models to be marked as having an expired password (and thus require a new password to be set when accessing any authenticated page).
+
+Passwords are only expired on demand by calling `resource.expire_password!`
+
+### Schema
+```ruby
+change_table [resource] do |t|
+  t.boolean :password_expired, null: false, default: false
+  t.index :password_expired
+end
+```
+
 ## Running tests
 
 Standard tests can be invoked using `rake`. 
