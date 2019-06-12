@@ -26,4 +26,11 @@ class TestPasswordArchivable < ActiveSupport::TestCase
       assert user.password_expired?
     end
   end
+
+  test 'it removes the expiry if the password is changed' do
+    user = User.create email: 'bob@microsoft.com', password: 'Password1', password_confirmation: 'Password1'
+    user.expire_password!
+    user.update(password: 'Password2', password_confirmation: 'Password2')
+    refute user.password_expired?
+  end
 end
