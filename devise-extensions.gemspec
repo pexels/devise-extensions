@@ -31,8 +31,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'm'
   s.add_development_dependency 'minitest'
-  s.add_development_dependency 'omniauth'
+  s.add_development_dependency 'omniauth', '>= 1.0.0', '< 2'
   s.add_development_dependency 'pry-byebug'
   s.add_development_dependency 'pry-rescue'
+  s.add_development_dependency 'rails'
   s.add_development_dependency 'rubocop', '~> 0.66.0'
 end

@@ -2,8 +2,7 @@
 
 require File.expand_path('../boot', __FILE__)
 
-require 'action_mailer/railtie'
-require "action_mailer/railtie"
+require "rails/railtie"
 require "rails/test_unit/railtie"
 
 Bundler.require :default, 'active_record'
